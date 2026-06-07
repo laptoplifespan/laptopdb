@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 120" width="680" height="120">
+  <text x="4" y="68" style="font-size:56px;font-family:sans-serif;letter-spacing:-0.03em;font-weight:600;fill:#F0F4F8;">Laptop</text>
+  <text x="232" y="68" style="font-size:56px;font-family:sans-serif;letter-spacing:-0.03em;font-weight:600;fill:#4A9ED8;">LifeSpan</text>
+  <path d="
+    M 4,84 L 108,84
+    L 112,84 L 115,79 L 118,84
+    L 130,84
+    L 134,84 L 137,72 L 140,96 L 143,84
+    L 155,84
+    L 158,84 L 161,65 L 164,103 L 167,84
+    L 178,84
+    L 181,84 L 184,72 L 187,96 L 190,84
+    L 202,84
+    L 205,84 L 208,72 L 211,96 L 214,84
+    L 226,84
+    L 229,84 L 232,72 L 235,96 L 238,84
+    L 250,84
+    L 253,84 L 256,72 L 259,96 L 262,84
+    L 274,84
+    L 277,84 L 280,72 L 283,96 L 286,84
+    L 298,84
+    L 336,84
+  " fill="none" stroke="#4A9ED8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
