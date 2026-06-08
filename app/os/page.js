@@ -35,15 +35,16 @@ export default async function OSPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {systems?.map((os) => (
-            <div
+            <Link
               key={os.id}
-              className="rounded-xl p-6"
+              href={`/os/${os.slug}`}
+              className="rounded-xl p-6 block transition hover:opacity-90"
               style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}}
             >
               <p style={{color: '#2A6EA8'}} className="text-sm font-medium mb-1">{os.type}</p>
               <h3 style={{color: '#102030'}} className="text-xl font-semibold mb-1">{os.name}</h3>
               {os.version && <p style={{color: '#243444'}} className="text-sm">Version: {os.version}</p>}
-            </div>
+            </Link>
           ))}
         </div>
       </div>
