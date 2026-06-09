@@ -4,6 +4,21 @@ import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
+export async function generateMetadata({ params }) {
+  const { slug } = await params
+  const { data: laptop } = await supabase
+    .from('laptops')
+    .select('brand, model, year, cpu')
+    .eq('slug', slug)
+    .single()
+
+  if (!laptop) return { title: 'Laptop Not Found — LaptopLifeSpan' }
+
+  return {
+    title: `${laptop.brand} ${laptop.model} Specs & OS Compatibility — LaptopLifeSpan`,
+    description: `Full specs for the ${laptop.brand} ${laptop.model}${laptop.year ? ` (${laptop.year})` : ''}. ${laptop.cpu ? `Powered by ${laptop.cpu}.` : ''} Check OS compatibility and upgrade options.`,
+  }
+}
 
 export default async function LaptopPage({ params }) {
   const { slug } = await params

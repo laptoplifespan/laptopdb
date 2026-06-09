@@ -1,6 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
+export const metadata = {
+  title: 'Operating Systems — LaptopLifeSpan',
+  description: 'Browse all operating systems in our database and find compatible laptops for each one.',
+}
 
 export const dynamic = 'force-dynamic'
 

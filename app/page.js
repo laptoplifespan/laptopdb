@@ -1,4 +1,8 @@
 import Link from 'next/link'
+export const metadata = {
+  title: 'LaptopLifeSpan — Find Your Laptop\'s Full Potential',
+  description: 'Browse specs for hundreds of laptop models, check OS compatibility, and discover upgrade options to extend your laptop\'s lifespan.',
+}
 import Image from 'next/image'
 
 export default function Home() {

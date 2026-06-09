@@ -4,6 +4,21 @@ import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
+export async function generateMetadata({ params }) {
+  const { slug } = await params
+  const { data: os } = await supabase
+    .from('operating_systems')
+    .select('name, version, type')
+    .eq('slug', slug)
+    .single()
+
+  if (!os) return { title: 'OS Not Found — LaptopLifeSpan' }
+
+  return {
+    title: `${os.name} Compatible Laptops — LaptopLifeSpan`,
+    description: `Find laptops compatible with ${os.name}${os.version ? ` ${os.version}` : ''}. Browse our full list of verified compatible hardware.`,
+  }
+}
 
 export default async function OSDetailPage({ params }) {
   const { slug } = await params

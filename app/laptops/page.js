@@ -1,4 +1,8 @@
 import Link from 'next/link'
+export const metadata = {
+  title: 'All Laptops — LaptopLifeSpan',
+  description: 'Browse our full database of laptop models with detailed specs, OS compatibility, and upgrade options.',
+}
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 
