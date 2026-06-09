@@ -5,7 +5,7 @@ export const metadata = {
 }
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
-
+import Footer from '@/app/components/Footer'
 export const dynamic = 'force-dynamic'
 
 export default async function LaptopsPage() {
@@ -56,6 +56,7 @@ export default async function LaptopsPage() {
           ))}
         </div>
       </div>
+  <Footer />
     </main>
   )
 }

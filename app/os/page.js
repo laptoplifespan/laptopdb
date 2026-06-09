@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
+import Footer from '@/app/components/Footer'
 export const metadata = {
   title: 'Operating Systems — LaptopLifeSpan',
   description: 'Browse all operating systems in our database and find compatible laptops for each one.',
@@ -52,6 +53,7 @@ export default async function OSPage() {
           ))}
         </div>
       </div>
+      <Footer />
     </main>
   )
 }

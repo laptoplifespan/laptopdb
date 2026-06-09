@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
-
+import Footer from '@/app/components/Footer'
 export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }) {
   const { slug } = await params
@@ -83,6 +83,7 @@ export default async function OSDetailPage({ params }) {
           </div>
         </div>
       </div>
+      <Footer />
     </main>
   )
 }

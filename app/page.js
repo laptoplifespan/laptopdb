@@ -4,7 +4,7 @@ export const metadata = {
   description: 'Browse specs for hundreds of laptop models, check OS compatibility, and discover upgrade options to extend your laptop\'s lifespan.',
 }
 import Image from 'next/image'
-
+import Footer from './components/Footer'
 export default function Home() {
   return (
     <main style={{backgroundColor: '#B8C4CE'}} className="min-h-screen">
@@ -55,6 +55,7 @@ export default function Home() {
           <p style={{color: '#243444'}}>Find compatible RAM and storage upgrades to breathe new life into your machine.</p>
         </div>
       </section>
+    <Footer />
     </main>
   )
 }
