@@ -12,7 +12,7 @@ export default function AdminPage() {
   const [laptop, setLaptop] = useState({
     brand: '', model: '', slug: '', year: '', cpu: '',
     ram_gb: '', max_ram_gb: '', storage: '', gpu: '',
-    display_inches: '', display_resolution: '', weight_kg: ''
+    display_inches: '', display_resolution: '', weight_kg: '',
   description: ''
   })
 
