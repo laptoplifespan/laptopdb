@@ -13,11 +13,12 @@ export default function AdminPage() {
     brand: '', model: '', slug: '', year: '', cpu: '',
     ram_gb: '', max_ram_gb: '', storage: '', gpu: '',
     display_inches: '', display_resolution: '', weight_kg: ''
+  description: ''
   })
 
   // OS form state
   const [os, setOs] = useState({
-    name: '', version: '', slug: '', type: ''
+    name: '', version: '', slug: '', type: '', description: ''
   })
 
   // Compatibility form state
@@ -152,6 +153,14 @@ export default function AdminPage() {
                   <input value={laptop[key]} onChange={e => setLaptop({...laptop, [key]: e.target.value})} style={inputStyle} />
                 </div>
               ))}
+             <div>
+                <label style={labelStyle}>Description</label>
+                <textarea
+                  value={laptop.description || ''}
+                  onChange={e => setLaptop({...laptop, description: e.target.value})}
+                  style={{...inputStyle, height: '100px', resize: 'vertical'}}
+                />
+              </div>
               <button type="submit" style={buttonStyle}>Add Laptop</button>
             </form>
           </div>
@@ -167,6 +176,14 @@ export default function AdminPage() {
                   <input value={os[key]} onChange={e => setOs({...os, [key]: e.target.value})} style={inputStyle} />
                 </div>
               ))}
+              <div>
+                <label style={labelStyle}>Description</label>
+                <textarea
+                  value={os.description || ''}
+                  onChange={e => setOs({...os, description: e.target.value})}
+                  style={{...inputStyle, height: '100px', resize: 'vertical'}}
+                />
+              </div>
               <button type="submit" style={buttonStyle}>Add OS</button>
             </form>
           </div>

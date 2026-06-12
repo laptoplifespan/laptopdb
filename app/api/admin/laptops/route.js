@@ -17,6 +17,7 @@ export async function POST(request) {
     display_inches: body.display_inches ? parseFloat(body.display_inches) : null,
     display_resolution: body.display_resolution || null,
     weight_kg: body.weight_kg ? parseFloat(body.weight_kg) : null,
+    description: body.description || null,
   }])
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

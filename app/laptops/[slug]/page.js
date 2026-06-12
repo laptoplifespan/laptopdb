@@ -65,7 +65,10 @@ export default async function LaptopPage({ params }) {
           {/* Main specs */}
           <div className="flex-1">
             <p style={{color: '#2A6EA8'}} className="font-medium mb-1">{laptop.brand}</p>
-            <h1 style={{color: '#102030'}} className="text-4xl font-bold mb-8">{laptop.model}</h1>
+            <h1 style={{color: '#102030'}} className="text-4xl font-bold mb-4">{laptop.model}</h1>
+            {laptop.description && (
+              <p style={{color: '#2A3A4A'}} className="text-lg mb-8">{laptop.description}</p>
+            )}
 
             <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6">
               <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">Specifications</h2>

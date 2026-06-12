@@ -56,9 +56,12 @@ export default async function OSDetailPage({ params }) {
           ← Back to all operating systems
         </Link>
 
-        <p style={{color: '#2A6EA8'}} className="font-medium mb-1">{os.type}</p>
+<p style={{color: '#2A6EA8'}} className="font-medium mb-1">{os.type}</p>
         <h1 style={{color: '#102030'}} className="text-4xl font-bold mb-2">{os.name}</h1>
-        {os.version && <p style={{color: '#2A3A4A'}} className="mb-8">Version: {os.version}</p>}
+        {os.version && <p style={{color: '#2A3A4A'}} className="mb-2">Version: {os.version}</p>}
+        {os.description && (
+          <p style={{color: '#2A3A4A'}} className="text-lg mb-8">{os.description}</p>
+        )}
 
         <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6">
           <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-6">Compatible Laptops</h2>

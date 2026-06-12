@@ -9,6 +9,7 @@ export async function POST(request) {
     version: body.version || null,
     slug: body.slug,
     type: body.type || null,
+    description: body.description || null,
   }])
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
