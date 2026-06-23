@@ -33,13 +33,17 @@ export default async function LaptopPage({ params }) {
 
   const { data: compatibilityData } = await supabase
     .from('compatibility')
-    .select('*, operating_systems(*)')
+    .select('os_id, compatible')
     .eq('laptop_id', laptop.id)
 
   const { data: allOS } = await supabase
     .from('operating_systems')
     .select('*')
     .order('name', { ascending: true })
+
+  const compatMap = new Map(
+    compatibilityData?.map(c => [String(c.os_id), c.compatible]) ?? []
+  )
 
   return (
     <main style={{backgroundColor: '#B8C4CE'}} className="min-h-screen">
@@ -93,9 +97,8 @@ export default async function LaptopPage({ params }) {
               <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">OS Compatibility</h2>
               <div className="space-y-3">
                 {allOS?.map((os) => {
-                  const compat = compatibilityData?.find(c => c.os_id === os.id)
-                  const isCompatible = compat?.compatible
-                  const hasData = compat !== undefined
+                  const hasData = compatMap.has(String(os.id))
+                  const isCompatible = compatMap.get(String(os.id))
 
                   return (
                     <div key={os.id} className="flex items-center justify-between">
