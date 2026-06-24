@@ -20,6 +20,20 @@ export async function generateMetadata({ params }) {
   }
 }
 
+// Turns plain text into React nodes with any http(s) URLs rendered as clickable links.
+function linkify(text) {
+  return text.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
+    /^https?:\/\//.test(part) ? (
+      <a key={i} href={part} target="_blank" rel="noopener noreferrer"
+         style={{color: '#2A6EA8', textDecoration: 'underline'}}>
+        {part}
+      </a>
+    ) : (
+      part
+    )
+  )
+}
+
 export default async function LaptopPage({ params }) {
   const { slug } = await params
 
@@ -69,10 +83,7 @@ export default async function LaptopPage({ params }) {
           {/* Main specs */}
           <div className="flex-1">
             <p style={{color: '#2A6EA8'}} className="font-medium mb-1">{laptop.brand}</p>
-            <h1 style={{color: '#102030'}} className="text-4xl font-bold mb-4">{laptop.model}</h1>
-            {laptop.description && (
-              <p style={{color: '#2A3A4A'}} className="text-lg mb-8">{laptop.description}</p>
-            )}
+            <h1 style={{color: '#102030'}} className="text-4xl font-bold mb-8">{laptop.model}</h1>
 
             <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6">
               <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">Specifications</h2>
@@ -84,10 +95,30 @@ export default async function LaptopPage({ params }) {
                   {laptop.max_ram_gb && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Max RAM</td><td className="py-3" style={{color: '#102030'}}>{laptop.max_ram_gb}GB</td></tr>}
                   {laptop.storage && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Storage</td><td className="py-3" style={{color: '#102030'}}>{laptop.storage}</td></tr>}
                   {laptop.gpu && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>GPU</td><td className="py-3" style={{color: '#102030'}}>{laptop.gpu}</td></tr>}
-                  {laptop.display_inches && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Display</td><td className="py-3" style={{color: '#102030'}}>{laptop.display_inches}" {laptop.display_resolution}</td></tr>}
+                  {laptop.display_inches && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Display</td><td className="py-3" style={{color: '#102030'}}>{laptop.display_inches}&quot; {laptop.display_resolution}</td></tr>}
                   {laptop.weight_kg && <tr><td className="py-3" style={{color: '#2A3A4A'}}>Weight</td><td className="py-3" style={{color: '#102030'}}>{laptop.weight_kg}kg</td></tr>}
                 </tbody>
               </table>
+            </div>
+
+            {/* Description */}
+            <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6 mt-6">
+              <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">Description</h2>
+              {laptop.description ? (
+                <p style={{color: '#243444'}} className="leading-relaxed whitespace-pre-line">{laptop.description}</p>
+              ) : (
+                <p style={{color: '#2A3A4A'}} className="text-sm italic">No description added yet.</p>
+              )}
+            </div>
+
+            {/* Upgrade Path */}
+            <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6 mt-6">
+              <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">Upgrade Path</h2>
+              {laptop.upgrade_path ? (
+                <p style={{color: '#243444'}} className="leading-relaxed whitespace-pre-line">{linkify(laptop.upgrade_path)}</p>
+              ) : (
+                <p style={{color: '#2A3A4A'}} className="text-sm italic">No upgrade recommendations added yet.</p>
+              )}
             </div>
           </div>
 

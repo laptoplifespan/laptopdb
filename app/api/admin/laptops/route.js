@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
-export async function POST(request) {
-  const body = await request.json()
-
-  const { error } = await supabase.from('laptops').insert([{
+// Build the column object from the request body (shared by insert + update).
+function laptopFields(body) {
+  return {
     brand: body.brand,
     model: body.model,
     slug: body.slug,
@@ -18,7 +17,51 @@ export async function POST(request) {
     display_resolution: body.display_resolution || null,
     weight_kg: body.weight_kg ? parseFloat(body.weight_kg) : null,
     description: body.description || null,
-  }])
+    upgrade_path: body.upgrade_path || null,
+  }
+}
+
+// List all laptops (used by the admin panel to pick one to edit).
+export async function GET() {
+  const { data, error } = await supabase
+    .from('laptops')
+    .select('*')
+    .order('brand', { ascending: true })
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ laptops: data })
+}
+
+export async function POST(request) {
+  const body = await request.json()
+
+  const { error } = await supabase.from('laptops').insert([laptopFields(body)])
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ success: true })
+}
+
+export async function PUT(request) {
+  const body = await request.json()
+  if (!body.id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+
+  const { error } = await supabase
+    .from('laptops')
+    .update(laptopFields(body))
+    .eq('id', body.id)
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ success: true })
+}
+
+export async function DELETE(request) {
+  const body = await request.json()
+  if (!body.id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+
+  // Remove any compatibility rows pointing at this laptop first.
+  await supabase.from('compatibility').delete().eq('laptop_id', body.id)
+
+  const { error } = await supabase.from('laptops').delete().eq('id', body.id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ success: true })

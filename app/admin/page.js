@@ -2,31 +2,39 @@
 
 import { useState } from 'react'
 
+const EMPTY_LAPTOP = {
+  id: null, brand: '', model: '', slug: '', year: '', cpu: '',
+  ram_gb: '', max_ram_gb: '', storage: '', gpu: '',
+  display_inches: '', display_resolution: '', weight_kg: '',
+  description: '', upgrade_path: ''
+}
+
+const EMPTY_OS = { id: null, name: '', version: '', slug: '', type: '', description: '' }
+
 export default function AdminPage() {
   const [password, setPassword] = useState('')
   const [authed, setAuthed] = useState(false)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState('laptops')
 
-  // Laptop form state
-  const [laptop, setLaptop] = useState({
-    brand: '', model: '', slug: '', year: '', cpu: '',
-    ram_gb: '', max_ram_gb: '', storage: '', gpu: '',
-    display_inches: '', display_resolution: '', weight_kg: '',
-  description: ''
-  })
+  const [laptop, setLaptop] = useState(EMPTY_LAPTOP)
+  const [os, setOs] = useState(EMPTY_OS)
+  const [compat, setCompat] = useState({ laptop_slug: '', os_slug: '', compatible: 'true' })
 
-  // OS form state
-  const [os, setOs] = useState({
-    name: '', version: '', slug: '', type: '', description: ''
-  })
-
-  // Compatibility form state
-  const [compat, setCompat] = useState({
-    laptop_slug: '', os_slug: '', compatible: 'true'
-  })
+  // Existing records, loaded so they can be edited.
+  const [laptopList, setLaptopList] = useState([])
+  const [osList, setOsList] = useState([])
 
   const [message, setMessage] = useState('')
+
+  const loadLists = async () => {
+    const [lRes, oRes] = await Promise.all([
+      fetch('/api/admin/laptops'),
+      fetch('/api/admin/os'),
+    ])
+    if (lRes.ok) setLaptopList((await lRes.json()).laptops ?? [])
+    if (oRes.ok) setOsList((await oRes.json()).operating_systems ?? [])
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -38,37 +46,88 @@ export default function AdminPage() {
     if (res.ok) {
       setAuthed(true)
       setError('')
+      loadLists()
     } else {
       setError('Incorrect password')
     }
   }
 
-  const handleAddLaptop = async (e) => {
+  // Convert null DB values to '' so inputs stay controlled.
+  const toForm = (record, empty) => {
+    const out = { ...empty }
+    for (const key of Object.keys(empty)) {
+      out[key] = record[key] ?? ''
+    }
+    out.id = record.id
+    return out
+  }
+
+  const handleSaveLaptop = async (e) => {
     e.preventDefault()
+    const editing = laptop.id != null
     const res = await fetch('/api/admin/laptops', {
-      method: 'POST',
+      method: editing ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(laptop)
     })
     if (res.ok) {
-      setMessage('Laptop added successfully!')
-      setLaptop({ brand: '', model: '', slug: '', year: '', cpu: '', ram_gb: '', max_ram_gb: '', storage: '', gpu: '', display_inches: '', display_resolution: '', weight_kg: '' })
+      setMessage(editing ? 'Laptop updated!' : 'Laptop added successfully!')
+      setLaptop(EMPTY_LAPTOP)
+      loadLists()
     } else {
       const data = await res.json()
       setMessage(`Error: ${data.error}`)
     }
   }
 
-  const handleAddOS = async (e) => {
+  const handleDeleteLaptop = async () => {
+    if (laptop.id == null) return
+    if (!confirm(`Delete ${laptop.brand} ${laptop.model}? This also removes its compatibility entries. This cannot be undone.`)) return
+    const res = await fetch('/api/admin/laptops', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: laptop.id })
+    })
+    if (res.ok) {
+      setMessage('Laptop deleted.')
+      setLaptop(EMPTY_LAPTOP)
+      loadLists()
+    } else {
+      const data = await res.json()
+      setMessage(`Error: ${data.error}`)
+    }
+  }
+
+  const handleSaveOS = async (e) => {
     e.preventDefault()
+    const editing = os.id != null
     const res = await fetch('/api/admin/os', {
-      method: 'POST',
+      method: editing ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(os)
     })
     if (res.ok) {
-      setMessage('OS added successfully!')
-      setOs({ name: '', version: '', slug: '', type: '' })
+      setMessage(editing ? 'OS updated!' : 'OS added successfully!')
+      setOs(EMPTY_OS)
+      loadLists()
+    } else {
+      const data = await res.json()
+      setMessage(`Error: ${data.error}`)
+    }
+  }
+
+  const handleDeleteOS = async () => {
+    if (os.id == null) return
+    if (!confirm(`Delete ${os.name}? This also removes its compatibility entries. This cannot be undone.`)) return
+    const res = await fetch('/api/admin/os', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: os.id })
+    })
+    if (res.ok) {
+      setMessage('OS deleted.')
+      setOs(EMPTY_OS)
+      loadLists()
     } else {
       const data = await res.json()
       setMessage(`Error: ${data.error}`)
@@ -103,11 +162,14 @@ export default function AdminPage() {
 
   const labelStyle = { color: '#102030', fontSize: '13px', fontWeight: '600', display: 'block', marginBottom: '4px' }
   const buttonStyle = { backgroundColor: '#2A6EA8', color: '#fff', padding: '10px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: '600' }
+  const deleteButtonStyle = { backgroundColor: '#B83A3A', color: '#fff', padding: '10px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: '600', marginLeft: '10px' }
+  const secondaryButtonStyle = { backgroundColor: '#A4B0BC', color: '#102030', padding: '10px 24px', borderRadius: '8px', border: '1px solid #3A5068', cursor: 'pointer', fontWeight: '600', marginLeft: '10px' }
   const tabStyle = (active) => ({
     padding: '8px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: '600',
     backgroundColor: active ? '#2A6EA8' : '#A4B0BC',
     color: active ? '#fff' : '#102030'
   })
+  const selectorStyle = { ...inputStyle, marginBottom: '20px' }
 
   if (!authed) {
     return (
@@ -138,22 +200,41 @@ export default function AdminPage() {
         )}
 
         <div style={{display: 'flex', gap: '8px', marginBottom: '32px'}}>
-          <button style={tabStyle(activeTab === 'laptops')} onClick={() => setActiveTab('laptops')}>Add Laptop</button>
-          <button style={tabStyle(activeTab === 'os')} onClick={() => setActiveTab('os')}>Add OS</button>
+          <button style={tabStyle(activeTab === 'laptops')} onClick={() => setActiveTab('laptops')}>Laptops</button>
+          <button style={tabStyle(activeTab === 'os')} onClick={() => setActiveTab('os')}>Operating Systems</button>
           <button style={tabStyle(activeTab === 'compat')} onClick={() => setActiveTab('compat')}>Add Compatibility</button>
         </div>
 
         {activeTab === 'laptops' && (
           <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8', borderRadius: '12px', padding: '24px'}}>
-            <h2 style={{color: '#102030', fontSize: '20px', fontWeight: '600', marginBottom: '20px'}}>Add New Laptop</h2>
-            <form onSubmit={handleAddLaptop}>
+            <h2 style={{color: '#102030', fontSize: '20px', fontWeight: '600', marginBottom: '20px'}}>
+              {laptop.id != null ? 'Edit Laptop' : 'Add New Laptop'}
+            </h2>
+
+            <label style={labelStyle}>Choose a laptop to edit, or add a new one</label>
+            <select
+              style={selectorStyle}
+              value={laptop.id ?? ''}
+              onChange={e => {
+                const found = laptopList.find(l => String(l.id) === e.target.value)
+                setLaptop(found ? toForm(found, EMPTY_LAPTOP) : EMPTY_LAPTOP)
+                setMessage('')
+              }}
+            >
+              <option value="">+ Add new laptop</option>
+              {laptopList.map(l => (
+                <option key={l.id} value={l.id}>{l.brand} {l.model}</option>
+              ))}
+            </select>
+
+            <form onSubmit={handleSaveLaptop}>
               {[['Brand', 'brand'], ['Model', 'model'], ['Slug (e.g. dell-xps-15)', 'slug'], ['Year', 'year'], ['CPU', 'cpu'], ['RAM (GB)', 'ram_gb'], ['Max RAM (GB)', 'max_ram_gb'], ['Storage', 'storage'], ['GPU', 'gpu'], ['Display Size (inches)', 'display_inches'], ['Display Resolution', 'display_resolution'], ['Weight (kg)', 'weight_kg']].map(([label, key]) => (
                 <div key={key}>
                   <label style={labelStyle}>{label}</label>
                   <input value={laptop[key]} onChange={e => setLaptop({...laptop, [key]: e.target.value})} style={inputStyle} />
                 </div>
               ))}
-             <div>
+              <div>
                 <label style={labelStyle}>Description</label>
                 <textarea
                   value={laptop.description || ''}
@@ -161,15 +242,48 @@ export default function AdminPage() {
                   style={{...inputStyle, height: '100px', resize: 'vertical'}}
                 />
               </div>
-              <button type="submit" style={buttonStyle}>Add Laptop</button>
+              <div>
+                <label style={labelStyle}>Upgrade Path (you can paste links — they become clickable)</label>
+                <textarea
+                  value={laptop.upgrade_path || ''}
+                  onChange={e => setLaptop({...laptop, upgrade_path: e.target.value})}
+                  style={{...inputStyle, height: '100px', resize: 'vertical'}}
+                />
+              </div>
+              <button type="submit" style={buttonStyle}>{laptop.id != null ? 'Save Changes' : 'Add Laptop'}</button>
+              {laptop.id != null && (
+                <>
+                  <button type="button" style={secondaryButtonStyle} onClick={() => { setLaptop(EMPTY_LAPTOP); setMessage('') }}>Cancel</button>
+                  <button type="button" style={deleteButtonStyle} onClick={handleDeleteLaptop}>Delete</button>
+                </>
+              )}
             </form>
           </div>
         )}
 
         {activeTab === 'os' && (
           <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8', borderRadius: '12px', padding: '24px'}}>
-            <h2 style={{color: '#102030', fontSize: '20px', fontWeight: '600', marginBottom: '20px'}}>Add New OS</h2>
-            <form onSubmit={handleAddOS}>
+            <h2 style={{color: '#102030', fontSize: '20px', fontWeight: '600', marginBottom: '20px'}}>
+              {os.id != null ? 'Edit OS' : 'Add New OS'}
+            </h2>
+
+            <label style={labelStyle}>Choose an OS to edit, or add a new one</label>
+            <select
+              style={selectorStyle}
+              value={os.id ?? ''}
+              onChange={e => {
+                const found = osList.find(o => String(o.id) === e.target.value)
+                setOs(found ? toForm(found, EMPTY_OS) : EMPTY_OS)
+                setMessage('')
+              }}
+            >
+              <option value="">+ Add new OS</option>
+              {osList.map(o => (
+                <option key={o.id} value={o.id}>{o.name}{o.version ? ` ${o.version}` : ''}</option>
+              ))}
+            </select>
+
+            <form onSubmit={handleSaveOS}>
               {[['Name', 'name'], ['Version', 'version'], ['Slug (e.g. ubuntu-24)', 'slug'], ['Type (Windows / Linux / macOS / ChromeOS)', 'type']].map(([label, key]) => (
                 <div key={key}>
                   <label style={labelStyle}>{label}</label>
@@ -184,7 +298,13 @@ export default function AdminPage() {
                   style={{...inputStyle, height: '100px', resize: 'vertical'}}
                 />
               </div>
-              <button type="submit" style={buttonStyle}>Add OS</button>
+              <button type="submit" style={buttonStyle}>{os.id != null ? 'Save Changes' : 'Add OS'}</button>
+              {os.id != null && (
+                <>
+                  <button type="button" style={secondaryButtonStyle} onClick={() => { setOs(EMPTY_OS); setMessage('') }}>Cancel</button>
+                  <button type="button" style={deleteButtonStyle} onClick={handleDeleteOS}>Delete</button>
+                </>
+              )}
             </form>
           </div>
         )}
