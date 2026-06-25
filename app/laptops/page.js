@@ -3,9 +3,9 @@ export const metadata = {
   title: 'All Laptops — LaptopLifeSpan',
   description: 'Browse our full database of laptop models with detailed specs, OS compatibility, and upgrade options.',
 }
-import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import Footer from '@/app/components/Footer'
+import Header from '@/app/components/Header'
 export const dynamic = 'force-dynamic'
 
 export default async function LaptopsPage() {
@@ -16,17 +16,7 @@ export default async function LaptopsPage() {
 
   return (
     <main style={{backgroundColor: '#B8C4CE'}} className="min-h-screen">
-      <header style={{backgroundColor: '#1E2E3E'}} className="px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/">
-            <Image src="/laptoplifespan-logo.svg" alt="LaptopLifeSpan" width={340} height={60} priority />
-          </Link>
-          <nav className="flex gap-6" style={{color: '#A8C0D4'}}>
-            <Link href="/laptops" className="hover:text-white transition">Laptops</Link>
-            <Link href="/os" className="hover:text-white transition">Operating Systems</Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <div className="max-w-6xl mx-auto px-6 py-12">
         <h2 style={{color: '#102030'}} className="text-4xl font-bold mb-8">All Laptops</h2>
