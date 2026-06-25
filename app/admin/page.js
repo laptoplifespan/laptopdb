@@ -67,7 +67,7 @@ export default function AdminPage() {
     const editing = laptop.id != null
     const res = await fetch('/api/admin/laptops', {
       method: editing ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
       body: JSON.stringify(laptop)
     })
     if (res.ok) {
@@ -85,7 +85,7 @@ export default function AdminPage() {
     if (!confirm(`Delete ${laptop.brand} ${laptop.model}? This also removes its compatibility entries. This cannot be undone.`)) return
     const res = await fetch('/api/admin/laptops', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
       body: JSON.stringify({ id: laptop.id })
     })
     if (res.ok) {
@@ -103,7 +103,7 @@ export default function AdminPage() {
     const editing = os.id != null
     const res = await fetch('/api/admin/os', {
       method: editing ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
       body: JSON.stringify(os)
     })
     if (res.ok) {
@@ -121,7 +121,7 @@ export default function AdminPage() {
     if (!confirm(`Delete ${os.name}? This also removes its compatibility entries. This cannot be undone.`)) return
     const res = await fetch('/api/admin/os', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
       body: JSON.stringify({ id: os.id })
     })
     if (res.ok) {
@@ -138,7 +138,7 @@ export default function AdminPage() {
     e.preventDefault()
     const res = await fetch('/api/admin/compatibility', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
       body: JSON.stringify(compat)
     })
     if (res.ok) {
