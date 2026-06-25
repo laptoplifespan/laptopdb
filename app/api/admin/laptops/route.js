@@ -45,12 +45,16 @@ export async function PUT(request) {
   const body = await request.json()
   if (!body.id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('laptops')
     .update(laptopFields(body))
     .eq('id', body.id)
+    .select()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (!data || data.length === 0) {
+    return NextResponse.json({ error: 'Update changed 0 rows — likely blocked by Supabase Row Level Security (UPDATE policy).' }, { status: 403 })
+  }
   return NextResponse.json({ success: true })
 }
 
