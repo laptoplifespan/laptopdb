@@ -14,6 +14,7 @@ function laptopFields(body) {
     year: body.year ? parseInt(body.year) : null,
     cpu: body.cpu || null,
     ram_gb: body.ram_gb ? parseInt(body.ram_gb) : null,
+    soldered_ram: body.soldered_ram === 'true' ? true : body.soldered_ram === 'false' ? false : null,
     max_ram_gb: body.max_ram_gb ? parseInt(body.max_ram_gb) : null,
     storage: body.storage || null,
     gpu: body.gpu || null,

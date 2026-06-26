@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 const EMPTY_LAPTOP = {
   id: null, brand: '', model: '', slug: '', year: '', cpu: '',
-  ram_gb: '', max_ram_gb: '', storage: '', gpu: '',
+  ram_gb: '', soldered_ram: '', max_ram_gb: '', storage: '', gpu: '',
   display_inches: '', display_resolution: '', weight_kg: '',
   description: '', upgrade_path: ''
 }
@@ -56,7 +56,7 @@ export default function AdminPage() {
   const toForm = (record, empty) => {
     const out = { ...empty }
     for (const key of Object.keys(empty)) {
-      out[key] = record[key] ?? ''
+      out[key] = record[key] == null ? '' : String(record[key])
     }
     out.id = record.id
     return out
@@ -234,6 +234,14 @@ export default function AdminPage() {
                   <input value={laptop[key]} onChange={e => setLaptop({...laptop, [key]: e.target.value})} style={inputStyle} />
                 </div>
               ))}
+              <div>
+                <label style={labelStyle}>Soldered RAM (is the RAM non-replaceable?)</label>
+                <select value={laptop.soldered_ram} onChange={e => setLaptop({...laptop, soldered_ram: e.target.value})} style={inputStyle}>
+                  <option value="">Unknown</option>
+                  <option value="true">Yes — soldered / not replaceable</option>
+                  <option value="false">No — replaceable</option>
+                </select>
+              </div>
               <div>
                 <label style={labelStyle}>Description</label>
                 <textarea
