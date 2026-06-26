@@ -232,16 +232,18 @@ export default function AdminPage() {
                 <div key={key}>
                   <label style={labelStyle}>{label}</label>
                   <input value={laptop[key]} onChange={e => setLaptop({...laptop, [key]: e.target.value})} style={inputStyle} />
+                  {key === 'ram_gb' && (
+                    <>
+                      <label style={labelStyle}>Soldered RAM (is the RAM non-replaceable?)</label>
+                      <select value={laptop.soldered_ram} onChange={e => setLaptop({...laptop, soldered_ram: e.target.value})} style={inputStyle}>
+                        <option value="">Unknown</option>
+                        <option value="true">Yes — soldered / not replaceable</option>
+                        <option value="false">No — replaceable</option>
+                      </select>
+                    </>
+                  )}
                 </div>
               ))}
-              <div>
-                <label style={labelStyle}>Soldered RAM (is the RAM non-replaceable?)</label>
-                <select value={laptop.soldered_ram} onChange={e => setLaptop({...laptop, soldered_ram: e.target.value})} style={inputStyle}>
-                  <option value="">Unknown</option>
-                  <option value="true">Yes — soldered / not replaceable</option>
-                  <option value="false">No — replaceable</option>
-                </select>
-              </div>
               <div>
                 <label style={labelStyle}>Description</label>
                 <textarea
