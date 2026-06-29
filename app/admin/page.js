@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import ConfigManager from '@/app/components/ConfigManager'
 
 const EMPTY_LAPTOP = {
-  id: null, brand: '', model: '', slug: '', year: '', cpu: '',
-  ram_gb: '', soldered_ram: '', max_ram_gb: '', tpm_2_0: '', storage: '', gpu: '',
+  id: null, brand: '', model: '', slug: '', year: '',
   display_inches: '', display_resolution: '', weight_kg: '',
   description: '', upgrade_path: ''
 }
@@ -228,32 +228,15 @@ export default function AdminPage() {
             </select>
 
             <form onSubmit={handleSaveLaptop}>
-              {[['Brand', 'brand'], ['Model', 'model'], ['Slug (e.g. dell-xps-15)', 'slug'], ['Year', 'year'], ['CPU', 'cpu'], ['RAM (GB)', 'ram_gb'], ['Max RAM (GB)', 'max_ram_gb'], ['Storage', 'storage'], ['GPU', 'gpu'], ['Display Size (inches)', 'display_inches'], ['Display Resolution', 'display_resolution'], ['Weight (kg)', 'weight_kg']].map(([label, key]) => (
+              {[['Brand', 'brand'], ['Model', 'model'], ['Slug (e.g. dell-xps-15)', 'slug'], ['Year', 'year'], ['Display Size (inches)', 'display_inches'], ['Display Resolution', 'display_resolution'], ['Weight (kg)', 'weight_kg']].map(([label, key]) => (
                 <div key={key}>
                   <label style={labelStyle}>{label}</label>
                   <input value={laptop[key]} onChange={e => setLaptop({...laptop, [key]: e.target.value})} style={inputStyle} />
-                  {key === 'ram_gb' && (
-                    <>
-                      <label style={labelStyle}>Soldered RAM (is the RAM non-replaceable?)</label>
-                      <select value={laptop.soldered_ram} onChange={e => setLaptop({...laptop, soldered_ram: e.target.value})} style={inputStyle}>
-                        <option value="">Unknown</option>
-                        <option value="true">Yes — soldered / not replaceable</option>
-                        <option value="false">No — replaceable</option>
-                      </select>
-                    </>
-                  )}
-                  {key === 'max_ram_gb' && (
-                    <>
-                      <label style={labelStyle}>TPM 2.0 (required for Windows 11)</label>
-                      <select value={laptop.tpm_2_0} onChange={e => setLaptop({...laptop, tpm_2_0: e.target.value})} style={inputStyle}>
-                        <option value="">Unknown</option>
-                        <option value="true">Yes — has TPM 2.0</option>
-                        <option value="false">No — no TPM 2.0</option>
-                      </select>
-                    </>
-                  )}
                 </div>
               ))}
+              <p style={{color: '#2A3A4A', fontSize: '13px', marginBottom: '10px'}}>
+                CPU, RAM, storage, GPU, Soldered RAM and TPM 2.0 are now set per <strong>configuration</strong> — manage them below after saving the laptop.
+              </p>
               <div>
                 <label style={labelStyle}>Description</label>
                 <textarea
@@ -278,6 +261,10 @@ export default function AdminPage() {
                 </>
               )}
             </form>
+
+            {laptop.id != null && (
+              <ConfigManager laptopId={laptop.id} password={password} />
+            )}
           </div>
         )}
 

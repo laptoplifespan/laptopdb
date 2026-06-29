@@ -6,19 +6,15 @@ import { isAdminRequest } from '@/lib/adminAuth'
 const UNAUTHORIZED = NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
 // Build the column object from the request body (shared by insert + update).
+// Per-config specs (cpu, ram, storage, gpu, tpm, etc.) now live in the
+// `configurations` table — see /api/admin/configurations. This only writes
+// the model-level fields.
 function laptopFields(body) {
   return {
     brand: body.brand,
     model: body.model,
     slug: body.slug,
     year: body.year ? parseInt(body.year) : null,
-    cpu: body.cpu || null,
-    ram_gb: body.ram_gb ? parseInt(body.ram_gb) : null,
-    soldered_ram: body.soldered_ram === 'true' ? true : body.soldered_ram === 'false' ? false : null,
-    max_ram_gb: body.max_ram_gb ? parseInt(body.max_ram_gb) : null,
-    tpm_2_0: body.tpm_2_0 === 'true' ? true : body.tpm_2_0 === 'false' ? false : null,
-    storage: body.storage || null,
-    gpu: body.gpu || null,
     display_inches: body.display_inches ? parseFloat(body.display_inches) : null,
     display_resolution: body.display_resolution || null,
     weight_kg: body.weight_kg ? parseFloat(body.weight_kg) : null,

@@ -2,8 +2,8 @@
 
 **Status:** In progress. Decision: **Option B** (per-config compatibility) chosen.
 - ✅ **Phase 1 complete** — `configurations` table created; existing 4 laptops migrated to one config each. Site unchanged (laptops columns left intact).
-- ⬜ Phase 2 — laptop page dropdown (next)
-- ⬜ Phase 3 — admin support for multiple configs
+- ✅ **Phase 2 complete** — laptop page reads configs; `SpecsTable` client component shows a config dropdown (only when >1 config).
+- ✅ **Phase 3 complete** — admin panel manages multiple configs per laptop via `ConfigManager` + `/api/admin/configurations`. Laptop form trimmed to model-level fields; per-config specs moved to the configurations manager. (Note: the old per-config columns on `laptops` are now unused but left in place; see cleanup note below.)
 - ⬜ Phase 4 — per-config compatibility (Option B)
 
 **Last updated:** 2026-06
@@ -116,6 +116,14 @@ models turn out to vary in compatibility.
 4. Exact split of model-level vs config-level fields — current draft above is the proposal.
 
 ---
+
+## Cleanup note (do later, not urgent)
+
+The original per-config columns on the `laptops` table (`cpu, ram_gb, soldered_ram,
+max_ram_gb, tpm_2_0, storage, gpu`) are now unused — that data lives in `configurations`.
+They're left in place for safety (the page's fallback still reads them if a laptop somehow
+has zero configs). Once the new flow is proven in production, these columns can be dropped
+to tidy the schema. Don't drop them until then.
 
 ## Rough sizing
 
