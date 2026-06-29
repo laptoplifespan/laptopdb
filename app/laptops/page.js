@@ -15,8 +15,12 @@ export default async function LaptopsPage() {
     .order('brand', { ascending: true })
     .order('model', { ascending: true })
 
+  // Brands that always get a header, shown first in this order.
+  const FEATURED_BRANDS = ['Acer', 'Asus', 'Apple']
+
   // Group laptops under their brand, preserving the sorted order.
   const byBrand = new Map()
+  for (const brand of FEATURED_BRANDS) byBrand.set(brand, [])
   for (const laptop of laptops ?? []) {
     const brand = laptop.brand || 'Other'
     if (!byBrand.has(brand)) byBrand.set(brand, [])
@@ -44,6 +48,9 @@ export default async function LaptopsPage() {
             >
               {brand}
             </h3>
+            {models.length === 0 && (
+              <p style={{color: '#2A3A4A'}} className="text-sm italic">No models listed yet.</p>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {models.map((laptop) => (
                 <Link
