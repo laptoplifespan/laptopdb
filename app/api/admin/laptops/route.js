@@ -67,9 +67,8 @@ export async function DELETE(request) {
   const body = await request.json()
   if (!body.id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
 
-  // Remove any compatibility rows pointing at this laptop first.
-  await supabaseAdmin.from('compatibility').delete().eq('laptop_id', body.id)
-
+  // Deleting a laptop cascades to its configurations, and those cascade to their
+  // compatibility rows, so no manual cleanup is needed here.
   const { error } = await supabaseAdmin.from('laptops').delete().eq('id', body.id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

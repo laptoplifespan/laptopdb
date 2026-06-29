@@ -19,7 +19,6 @@ export default function AdminPage() {
 
   const [laptop, setLaptop] = useState(EMPTY_LAPTOP)
   const [os, setOs] = useState(EMPTY_OS)
-  const [compat, setCompat] = useState({ laptop_slug: '', os_slug: '', compatible: 'true' })
 
   // Existing records, loaded so they can be edited.
   const [laptopList, setLaptopList] = useState([])
@@ -134,22 +133,6 @@ export default function AdminPage() {
     }
   }
 
-  const handleAddCompat = async (e) => {
-    e.preventDefault()
-    const res = await fetch('/api/admin/compatibility', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
-      body: JSON.stringify(compat)
-    })
-    if (res.ok) {
-      setMessage('Compatibility entry added!')
-      setCompat({ laptop_slug: '', os_slug: '', compatible: 'true' })
-    } else {
-      const data = await res.json()
-      setMessage(`Error: ${data.error}`)
-    }
-  }
-
   const inputStyle = {
     backgroundColor: '#B8C4CE',
     border: '1px solid #3A5068',
@@ -202,7 +185,6 @@ export default function AdminPage() {
         <div style={{display: 'flex', gap: '8px', marginBottom: '32px'}}>
           <button style={tabStyle(activeTab === 'laptops')} onClick={() => setActiveTab('laptops')}>Laptops</button>
           <button style={tabStyle(activeTab === 'os')} onClick={() => setActiveTab('os')}>Operating Systems</button>
-          <button style={tabStyle(activeTab === 'compat')} onClick={() => setActiveTab('compat')}>Add Compatibility</button>
         </div>
 
         {activeTab === 'laptops' && (
@@ -263,7 +245,7 @@ export default function AdminPage() {
             </form>
 
             {laptop.id != null && (
-              <ConfigManager laptopId={laptop.id} password={password} />
+              <ConfigManager laptopId={laptop.id} password={password} osList={osList} />
             )}
           </div>
         )}
@@ -316,23 +298,6 @@ export default function AdminPage() {
           </div>
         )}
 
-        {activeTab === 'compat' && (
-          <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8', borderRadius: '12px', padding: '24px'}}>
-            <h2 style={{color: '#102030', fontSize: '20px', fontWeight: '600', marginBottom: '20px'}}>Add Compatibility Entry</h2>
-            <form onSubmit={handleAddCompat}>
-              <label style={labelStyle}>Laptop Slug</label>
-              <input value={compat.laptop_slug} onChange={e => setCompat({...compat, laptop_slug: e.target.value})} style={inputStyle} placeholder="e.g. lenovo-thinkpad-t480" />
-              <label style={labelStyle}>OS Slug</label>
-              <input value={compat.os_slug} onChange={e => setCompat({...compat, os_slug: e.target.value})} style={inputStyle} placeholder="e.g. windows-11" />
-              <label style={labelStyle}>Compatible?</label>
-              <select value={compat.compatible} onChange={e => setCompat({...compat, compatible: e.target.value})} style={inputStyle}>
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </select>
-              <button type="submit" style={buttonStyle}>Add Entry</button>
-            </form>
-          </div>
-        )}
       </div>
     </main>
   )

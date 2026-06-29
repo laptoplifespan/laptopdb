@@ -4,7 +4,7 @@
 - ✅ **Phase 1 complete** — `configurations` table created; existing 4 laptops migrated to one config each. Site unchanged (laptops columns left intact).
 - ✅ **Phase 2 complete** — laptop page reads configs; `SpecsTable` client component shows a config dropdown (only when >1 config).
 - ✅ **Phase 3 complete** — admin panel manages multiple configs per laptop via `ConfigManager` + `/api/admin/configurations`. Laptop form trimmed to model-level fields; per-config specs moved to the configurations manager. (Note: the old per-config columns on `laptops` are now unused but left in place; see cleanup note below.)
-- ⬜ Phase 4 — per-config compatibility (Option B)
+- ✅ **Phase 4 complete (Option B)** — compatibility moved to per-configuration. `compatibility.configuration_id` added; laptop & OS pages read per-config; compatibility editing now lives inside the configuration editor (`ConfigManager`), replacing the old standalone compatibility tab.
 
 **Last updated:** 2026-06
 
@@ -124,6 +124,10 @@ max_ram_gb, tpm_2_0, storage, gpu`) are now unused — that data lives in `confi
 They're left in place for safety (the page's fallback still reads them if a laptop somehow
 has zero configs). Once the new flow is proven in production, these columns can be dropped
 to tidy the schema. Don't drop them until then.
+
+Similarly, `compatibility.laptop_id` is now unused (kept nullable so the migration was
+reversible and to avoid a deploy-timing gap). It can be dropped once Phase 4 is proven:
+`alter table compatibility drop column laptop_id;`
 
 ## Rough sizing
 

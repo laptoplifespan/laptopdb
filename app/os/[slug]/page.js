@@ -31,11 +31,23 @@ export default async function OSDetailPage({ params }) {
 
   if (!os) notFound()
 
-  const { data: compatibilityData } = await supabase
+  // Compatibility is recorded per configuration; collect the distinct laptops that
+  // have at least one configuration compatible with this OS.
+  const { data: compatRows } = await supabase
     .from('compatibility')
-    .select('*, laptops(*)')
+    .select('configurations(laptops(*))')
     .eq('os_id', os.id)
     .eq('compatible', true)
+
+  const seen = new Set()
+  const compatibleLaptops = []
+  for (const row of compatRows ?? []) {
+    const laptop = row.configurations?.laptops
+    if (laptop && !seen.has(laptop.id)) {
+      seen.add(laptop.id)
+      compatibleLaptops.push(laptop)
+    }
+  }
 
   return (
     <main style={{backgroundColor: '#B8C4CE'}} className="min-h-screen">
@@ -56,12 +68,12 @@ export default async function OSDetailPage({ params }) {
         <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6">
           <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-6">Compatible Laptops</h2>
 
-          {!compatibilityData?.length && (
+          {compatibleLaptops.length === 0 && (
             <p style={{color: '#2A3A4A'}}>No compatible laptops recorded yet.</p>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {compatibilityData?.map(({ laptops: laptop }) => (
+            {compatibleLaptops.map((laptop) => (
               <Link
                 key={laptop.id}
                 href={`/laptops/${laptop.slug}`}
