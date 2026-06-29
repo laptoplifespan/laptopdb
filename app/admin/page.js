@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 const EMPTY_LAPTOP = {
   id: null, brand: '', model: '', slug: '', year: '', cpu: '',
-  ram_gb: '', soldered_ram: '', max_ram_gb: '', storage: '', gpu: '',
+  ram_gb: '', soldered_ram: '', max_ram_gb: '', tpm_2_0: '', storage: '', gpu: '',
   display_inches: '', display_resolution: '', weight_kg: '',
   description: '', upgrade_path: ''
 }
@@ -239,6 +239,16 @@ export default function AdminPage() {
                         <option value="">Unknown</option>
                         <option value="true">Yes — soldered / not replaceable</option>
                         <option value="false">No — replaceable</option>
+                      </select>
+                    </>
+                  )}
+                  {key === 'max_ram_gb' && (
+                    <>
+                      <label style={labelStyle}>TPM 2.0 (required for Windows 11)</label>
+                      <select value={laptop.tpm_2_0} onChange={e => setLaptop({...laptop, tpm_2_0: e.target.value})} style={inputStyle}>
+                        <option value="">Unknown</option>
+                        <option value="true">Yes — has TPM 2.0</option>
+                        <option value="false">No — no TPM 2.0</option>
                       </select>
                     </>
                   )}
