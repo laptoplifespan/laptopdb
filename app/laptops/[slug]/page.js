@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Footer from '@/app/components/Footer'
 import Header from '@/app/components/Header'
+import SpecsTable from '@/app/components/SpecsTable'
 export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }) {
   const { slug } = await params
@@ -45,6 +46,13 @@ export default async function LaptopPage({ params }) {
 
   if (!laptop) notFound()
 
+  const { data: configs } = await supabase
+    .from('configurations')
+    .select('*')
+    .eq('laptop_id', laptop.id)
+    .order('sort_order', { ascending: true })
+    .order('label', { ascending: true })
+
   const { data: compatibilityData } = await supabase
     .from('compatibility')
     .select('os_id, compatible')
@@ -75,23 +83,7 @@ export default async function LaptopPage({ params }) {
             <p style={{color: '#2A6EA8'}} className="font-medium mb-1">{laptop.brand}</p>
             <h1 style={{color: '#102030'}} className="text-4xl font-bold mb-8">{laptop.model}</h1>
 
-            <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6">
-              <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">Specifications</h2>
-              <table className="w-full text-sm">
-                <tbody>
-                  {laptop.year && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3 w-40" style={{color: '#2A3A4A'}}>Year</td><td className="py-3" style={{color: '#102030'}}>{laptop.year}</td></tr>}
-                  {laptop.cpu && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>CPU</td><td className="py-3" style={{color: '#102030'}}>{laptop.cpu}</td></tr>}
-                  {laptop.ram_gb && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>RAM</td><td className="py-3" style={{color: '#102030'}}>{laptop.ram_gb}GB</td></tr>}
-                  {laptop.soldered_ram != null && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Soldered RAM</td><td className="py-3" style={{color: '#102030'}}>{laptop.soldered_ram ? 'Yes' : 'No'}</td></tr>}
-                  {laptop.max_ram_gb && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Max RAM</td><td className="py-3" style={{color: '#102030'}}>{laptop.max_ram_gb}GB</td></tr>}
-                  {laptop.tpm_2_0 != null && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>TPM 2.0</td><td className="py-3" style={{color: '#102030'}}>{laptop.tpm_2_0 ? 'Yes' : 'No'}</td></tr>}
-                  {laptop.storage && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Storage</td><td className="py-3" style={{color: '#102030'}}>{laptop.storage}</td></tr>}
-                  {laptop.gpu && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>GPU</td><td className="py-3" style={{color: '#102030'}}>{laptop.gpu}</td></tr>}
-                  {laptop.display_inches && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Display</td><td className="py-3" style={{color: '#102030'}}>{laptop.display_inches}&quot; {laptop.display_resolution}</td></tr>}
-                  {laptop.weight_kg && <tr><td className="py-3" style={{color: '#2A3A4A'}}>Weight</td><td className="py-3" style={{color: '#102030'}}>{laptop.weight_kg}kg</td></tr>}
-                </tbody>
-              </table>
-            </div>
+            <SpecsTable laptop={laptop} configs={configs} />
 
             {/* Description */}
             <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6 mt-6">
