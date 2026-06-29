@@ -15,7 +15,7 @@ function configFields(body) {
     tpm_2_0: body.tpm_2_0 === 'true' ? true : body.tpm_2_0 === 'false' ? false : null,
     storage: body.storage || null,
     gpu: body.gpu || null,
-    sort_order: body.sort_order ? parseInt(body.sort_order) : 0,
+    sort_order: Number.isFinite(parseInt(body.sort_order)) ? parseInt(body.sort_order) : 0,
   }
 }
 
