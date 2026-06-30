@@ -9,7 +9,11 @@ const EMPTY_LAPTOP = {
   description: '', upgrade_path: ''
 }
 
-const EMPTY_OS = { id: null, name: '', version: '', slug: '', type: '', description: '' }
+const EMPTY_OS = {
+  id: null, name: '', version: '', slug: '', type: '', description: '',
+  min_ram_gb: '', min_storage_gb: '', requires_tpm_2_0: '', requires_secure_boot: '',
+  min_cpu_intel: '', min_cpu_amd: '', requirements_notes: ''
+}
 
 export default function AdminPage() {
   const [password, setPassword] = useState('')
@@ -279,6 +283,39 @@ export default function AdminPage() {
                   <input value={os[key]} onChange={e => setOs({...os, [key]: e.target.value})} style={inputStyle} />
                 </div>
               ))}
+
+              <h3 style={{color: '#102030', fontSize: '15px', fontWeight: '700', margin: '16px 0 8px'}}>Requirements</h3>
+              {[['Minimum RAM (GB)', 'min_ram_gb'], ['Minimum Storage (GB)', 'min_storage_gb'], ['Minimum CPU — Intel', 'min_cpu_intel'], ['Minimum CPU — AMD', 'min_cpu_amd']].map(([label, key]) => (
+                <div key={key}>
+                  <label style={labelStyle}>{label}</label>
+                  <input value={os[key]} onChange={e => setOs({...os, [key]: e.target.value})} style={inputStyle} />
+                </div>
+              ))}
+              <div>
+                <label style={labelStyle}>Requires TPM 2.0?</label>
+                <select value={os.requires_tpm_2_0} onChange={e => setOs({...os, requires_tpm_2_0: e.target.value})} style={inputStyle}>
+                  <option value="">Unknown / Not applicable</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              <div>
+                <label style={labelStyle}>Requires Secure Boot?</label>
+                <select value={os.requires_secure_boot} onChange={e => setOs({...os, requires_secure_boot: e.target.value})} style={inputStyle}>
+                  <option value="">Unknown / Not applicable</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              <div>
+                <label style={labelStyle}>Additional requirements / notes</label>
+                <textarea
+                  value={os.requirements_notes || ''}
+                  onChange={e => setOs({...os, requirements_notes: e.target.value})}
+                  style={{...inputStyle, height: '80px', resize: 'vertical'}}
+                />
+              </div>
+
               <div>
                 <label style={labelStyle}>Description</label>
                 <textarea

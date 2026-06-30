@@ -12,6 +12,13 @@ function osFields(body) {
     slug: body.slug,
     type: body.type || null,
     description: body.description || null,
+    min_ram_gb: body.min_ram_gb ? parseInt(body.min_ram_gb) : null,
+    min_storage_gb: body.min_storage_gb ? parseInt(body.min_storage_gb) : null,
+    requires_tpm_2_0: body.requires_tpm_2_0 === 'true' ? true : body.requires_tpm_2_0 === 'false' ? false : null,
+    requires_secure_boot: body.requires_secure_boot === 'true' ? true : body.requires_secure_boot === 'false' ? false : null,
+    min_cpu_intel: body.min_cpu_intel || null,
+    min_cpu_amd: body.min_cpu_amd || null,
+    requirements_notes: body.requirements_notes || null,
   }
 }
 

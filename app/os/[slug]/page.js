@@ -58,13 +58,42 @@ export default async function OSDetailPage({ params }) {
           ← Back to all operating systems
         </Link>
 
-<p style={{color: '#2A6EA8'}} className="font-medium mb-1">{os.type}</p>
+        <p style={{color: '#2A6EA8'}} className="font-medium mb-1">{os.type}</p>
         <h1 style={{color: '#102030'}} className="text-4xl font-bold mb-2">{os.name}</h1>
-        {os.version && <p style={{color: '#2A3A4A'}} className="mb-2">Version: {os.version}</p>}
-        {os.description && (
-          <p style={{color: '#2A3A4A'}} className="text-lg mb-8">{os.description}</p>
-        )}
+        {os.version && <p style={{color: '#2A3A4A'}} className="mb-8">Version: {os.version}</p>}
 
+        {/* Requirements */}
+        <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6 mb-6">
+          <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">Requirements</h2>
+          {(os.min_ram_gb != null || os.min_storage_gb != null || os.requires_tpm_2_0 != null ||
+            os.requires_secure_boot != null || os.min_cpu_intel || os.min_cpu_amd || os.requirements_notes) ? (
+            <table className="w-full text-sm">
+              <tbody>
+                {os.min_cpu_intel && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3 w-48" style={{color: '#2A3A4A'}}>Minimum CPU (Intel)</td><td className="py-3" style={{color: '#102030'}}>{os.min_cpu_intel}</td></tr>}
+                {os.min_cpu_amd && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Minimum CPU (AMD)</td><td className="py-3" style={{color: '#102030'}}>{os.min_cpu_amd}</td></tr>}
+                {os.min_ram_gb != null && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Minimum RAM</td><td className="py-3" style={{color: '#102030'}}>{os.min_ram_gb}GB</td></tr>}
+                {os.min_storage_gb != null && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Minimum Storage</td><td className="py-3" style={{color: '#102030'}}>{os.min_storage_gb}GB</td></tr>}
+                {os.requires_tpm_2_0 != null && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>TPM 2.0</td><td className="py-3" style={{color: '#102030'}}>{os.requires_tpm_2_0 ? 'Required' : 'Not required'}</td></tr>}
+                {os.requires_secure_boot != null && <tr style={{borderBottom: '1px solid #C4CED8'}}><td className="py-3" style={{color: '#2A3A4A'}}>Secure Boot</td><td className="py-3" style={{color: '#102030'}}>{os.requires_secure_boot ? 'Required' : 'Not required'}</td></tr>}
+                {os.requirements_notes && <tr><td className="py-3" style={{color: '#2A3A4A'}}>Notes</td><td className="py-3 whitespace-pre-line" style={{color: '#102030'}}>{os.requirements_notes}</td></tr>}
+              </tbody>
+            </table>
+          ) : (
+            <p style={{color: '#2A3A4A'}} className="text-sm italic">No requirements added yet.</p>
+          )}
+        </div>
+
+        {/* Description */}
+        <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6 mb-6">
+          <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">Description</h2>
+          {os.description ? (
+            <p style={{color: '#243444'}} className="leading-relaxed whitespace-pre-line">{os.description}</p>
+          ) : (
+            <p style={{color: '#2A3A4A'}} className="text-sm italic">No description added yet.</p>
+          )}
+        </div>
+
+        {/* Compatible Laptops */}
         <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6">
           <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-6">Compatible Laptops</h2>
 
