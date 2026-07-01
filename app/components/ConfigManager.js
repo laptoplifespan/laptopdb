@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 
 const EMPTY_CONFIG = {
   id: null, label: '', cpu: '', ram_gb: '', soldered_ram: '',
-  max_ram_gb: '', tpm_2_0: '', storage: '', gpu: '', sort_order: ''
+  max_ram_gb: '', tpm_2_0: '', storage: '', gpu: '', vram: '', sort_order: ''
 }
 
 const inputStyle = {
@@ -157,7 +157,7 @@ export default function ConfigManager({ laptopId, password, osList }) {
         <label style={labelStyle}>Label (e.g. &quot;Core i5 / 16GB / 512GB&quot;)</label>
         <input value={form.label} onChange={e => setForm({...form, label: e.target.value})} style={inputStyle} />
 
-        {[['CPU', 'cpu'], ['RAM (GB)', 'ram_gb'], ['Max RAM (GB)', 'max_ram_gb'], ['Storage', 'storage'], ['GPU', 'gpu'], ['Sort order (lower shows first)', 'sort_order']].map(([label, key]) => (
+        {[['CPU', 'cpu'], ['RAM (GB)', 'ram_gb'], ['Max RAM (GB)', 'max_ram_gb'], ['Storage', 'storage'], ['GPU', 'gpu'], ['VRAM (e.g. 4 GB GDDR6, or Shared)', 'vram'], ['Sort order (lower shows first)', 'sort_order']].map(([label, key]) => (
           <div key={key}>
             <label style={labelStyle}>{label}</label>
             <input value={form[key]} onChange={e => setForm({...form, [key]: e.target.value})} style={inputStyle} />

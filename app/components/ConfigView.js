@@ -79,6 +79,7 @@ export default function ConfigView({ laptop, configs, allOS, compatByConfig }) {
               {config.tpm_2_0 != null && <tr style={rowStyle}><td className="py-3" style={labelCell}>TPM 2.0</td><td className="py-3" style={valueCell}>{config.tpm_2_0 ? 'Yes' : 'No'}</td></tr>}
               {config.storage && <tr style={rowStyle}><td className="py-3" style={labelCell}>Storage</td><td className="py-3" style={valueCell}>{config.storage}</td></tr>}
               {config.gpu && <tr style={rowStyle}><td className="py-3" style={labelCell}>GPU</td><td className="py-3" style={valueCell}>{config.gpu}</td></tr>}
+              {config.vram && <tr style={rowStyle}><td className="py-3" style={labelCell}>VRAM</td><td className="py-3" style={valueCell}>{config.vram}</td></tr>}
               {laptop.display_inches && <tr style={rowStyle}><td className="py-3" style={labelCell}>Display</td><td className="py-3" style={valueCell}>{laptop.display_inches}&quot; {laptop.display_resolution}</td></tr>}
               {laptop.weight_kg && <tr><td className="py-3" style={labelCell}>Weight</td><td className="py-3" style={valueCell}>{laptop.weight_kg}kg</td></tr>}
             </tbody>
