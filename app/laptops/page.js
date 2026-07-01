@@ -16,7 +16,7 @@ export default async function LaptopsPage() {
     .order('model', { ascending: true })
 
   // Brands that always get a header, shown first. Keep this list alphabetical.
-  const FEATURED_BRANDS = ['Acer', 'Apple', 'Asus']
+  const FEATURED_BRANDS = ['Acer', 'Apple', 'Asus', 'Dell', 'HP', 'Lenovo']
 
   // Group laptops under their brand, preserving the sorted order.
   const byBrand = new Map()
