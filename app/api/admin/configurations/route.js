@@ -10,6 +10,7 @@ function configFields(body) {
     label: body.label || null,
     cpu: body.cpu || null,
     ram_gb: body.ram_gb ? parseInt(body.ram_gb) : null,
+    ram_type: body.ram_type || null,
     soldered_ram: body.soldered_ram === 'true' ? true : body.soldered_ram === 'false' ? false : null,
     max_ram_gb: body.max_ram_gb ? parseInt(body.max_ram_gb) : null,
     tpm_2_0: body.tpm_2_0 === 'true' ? true : body.tpm_2_0 === 'false' ? false : null,

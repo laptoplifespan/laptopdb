@@ -74,6 +74,7 @@ export default function ConfigView({ laptop, configs, allOS, compatByConfig }) {
               {laptop.year && <tr style={rowStyle}><td className="py-3 w-40" style={labelCell}>Year</td><td className="py-3" style={valueCell}>{laptop.year}</td></tr>}
               {config.cpu && <tr style={rowStyle}><td className="py-3" style={labelCell}>CPU</td><td className="py-3" style={valueCell}>{config.cpu}</td></tr>}
               {config.ram_gb && <tr style={rowStyle}><td className="py-3" style={labelCell}>RAM</td><td className="py-3" style={valueCell}>{config.ram_gb}GB</td></tr>}
+              {config.ram_type && <tr style={rowStyle}><td className="py-3" style={labelCell}>RAM Type</td><td className="py-3" style={valueCell}>{config.ram_type}</td></tr>}
               {config.soldered_ram != null && <tr style={rowStyle}><td className="py-3" style={labelCell}>Soldered RAM</td><td className="py-3" style={valueCell}>{config.soldered_ram ? 'Yes' : 'No'}</td></tr>}
               {config.max_ram_gb && <tr style={rowStyle}><td className="py-3" style={labelCell}>Max RAM</td><td className="py-3" style={valueCell}>{config.max_ram_gb}GB</td></tr>}
               {config.tpm_2_0 != null && <tr style={rowStyle}><td className="py-3" style={labelCell}>TPM 2.0</td><td className="py-3" style={valueCell}>{config.tpm_2_0 ? 'Yes' : 'No'}</td></tr>}
