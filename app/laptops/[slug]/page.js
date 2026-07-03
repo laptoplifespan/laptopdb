@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
   if (!laptop) return { title: 'Laptop Not Found — LaptopLifeSpan' }
 
   return {
-    title: `${laptop.brand} ${laptop.model} Specs & OS Compatibility — LaptopLifeSpan`,
+    title: `${laptop.brand} ${laptop.model}${laptop.year ? ` (${laptop.year})` : ''} Specs & OS Compatibility — LaptopLifeSpan`,
     description: `Full specs for the ${laptop.brand} ${laptop.model}${laptop.year ? ` (${laptop.year})` : ''}. Check OS compatibility and upgrade options.`,
   }
 }

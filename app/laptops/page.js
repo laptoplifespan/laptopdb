@@ -13,19 +13,32 @@ export default async function LaptopsPage() {
     .from('laptops')
     .select('*')
     .order('brand', { ascending: true })
+    .order('year', { ascending: false })
     .order('model', { ascending: true })
 
   // Brands that always get a header, shown first. Keep this list alphabetical.
   const FEATURED_BRANDS = ['Acer', 'Apple', 'Asus', 'Dell', 'HP', 'Lenovo']
 
-  // Group laptops under their brand, preserving the sorted order.
+  // Group laptops by brand, then by year within each brand.
+  // Structure: Map<brand, Map<year, laptop[]>>
   const byBrand = new Map()
-  for (const brand of FEATURED_BRANDS) byBrand.set(brand, [])
+  for (const brand of FEATURED_BRANDS) byBrand.set(brand, new Map())
   for (const laptop of laptops ?? []) {
     const brand = laptop.brand || 'Other'
-    if (!byBrand.has(brand)) byBrand.set(brand, [])
-    byBrand.get(brand).push(laptop)
+    if (!byBrand.has(brand)) byBrand.set(brand, new Map())
+    const years = byBrand.get(brand)
+    const year = laptop.year ?? 'Unknown'
+    if (!years.has(year)) years.set(year, [])
+    years.get(year).push(laptop)
   }
+
+  // Years newest-first within a brand; "Unknown" sinks to the bottom.
+  const orderedYears = (years) =>
+    [...years.keys()].sort((a, b) => {
+      if (a === 'Unknown') return 1
+      if (b === 'Unknown') return -1
+      return b - a
+    })
 
   return (
     <main style={{backgroundColor: '#B8C4CE'}} className="min-h-screen">
@@ -40,7 +53,7 @@ export default async function LaptopsPage() {
           <p style={{color: '#2A3A4A'}}>No laptops in the database yet.</p>
         )}
 
-        {[...byBrand.entries()].map(([brand, models]) => (
+        {[...byBrand.entries()].map(([brand, years]) => (
           <section key={brand} className="mb-12">
             <h3
               style={{color: '#102030', borderBottom: '2px solid #2A6EA8'}}
@@ -48,27 +61,31 @@ export default async function LaptopsPage() {
             >
               {brand}
             </h3>
-            {models.length === 0 && (
+
+            {years.size === 0 && (
               <p style={{color: '#2A3A4A'}} className="text-sm italic">No models listed yet.</p>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {models.map((laptop) => (
-                <Link
-                  key={laptop.id}
-                  href={`/laptops/${laptop.slug}`}
-                  className="rounded-xl p-6 transition hover:opacity-90"
-                  style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}}
-                >
-                  <p style={{color: '#2A6EA8'}} className="text-sm font-medium mb-1">{laptop.brand}</p>
-                  <h4 style={{color: '#102030'}} className="text-xl font-semibold mb-2">{laptop.model}</h4>
-                  <div className="text-sm space-y-1" style={{color: '#243444'}}>
-                    {laptop.cpu && <p>CPU: {laptop.cpu}</p>}
-                    {laptop.ram_gb && <p>RAM: {laptop.ram_gb}GB</p>}
-                    {laptop.year && <p>Year: {laptop.year}</p>}
-                  </div>
-                </Link>
-              ))}
-            </div>
+
+            {orderedYears(years).map((year) => (
+              <div key={year} className="mb-6">
+                <h4 style={{color: '#2A3A4A'}} className="text-lg font-semibold mb-3">
+                  {year === 'Unknown' ? 'Year unknown' : year}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {years.get(year).map((laptop) => (
+                    <Link
+                      key={laptop.id}
+                      href={`/laptops/${laptop.slug}`}
+                      className="rounded-xl p-6 transition hover:opacity-90"
+                      style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}}
+                    >
+                      <p style={{color: '#2A6EA8'}} className="text-sm font-medium mb-1">{laptop.brand}</p>
+                      <h5 style={{color: '#102030'}} className="text-xl font-semibold">{laptop.model}</h5>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
           </section>
         ))}
       </div>
