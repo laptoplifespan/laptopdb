@@ -5,7 +5,11 @@ export default function Footer() {
     <footer style={{backgroundColor: '#1E2E3E', color: '#A8C0D4'}} className="mt-16 px-6 py-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-sm">© 2026 LaptopLifeSpan. All rights reserved.</p>
-        <Link href="/privacy" style={{color: '#A8C0D4'}} className="text-sm hover:text-white transition">Privacy Policy</Link>
+        <nav className="flex gap-6">
+          <Link href="/about" style={{color: '#A8C0D4'}} className="text-sm hover:text-white transition">About</Link>
+          <Link href="/contact" style={{color: '#A8C0D4'}} className="text-sm hover:text-white transition">Contact</Link>
+          <Link href="/privacy" style={{color: '#A8C0D4'}} className="text-sm hover:text-white transition">Privacy Policy</Link>
+        </nav>
       </div>
     </footer>
   )
