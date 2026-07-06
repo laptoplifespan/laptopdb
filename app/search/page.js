@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
+import { searchAll } from '@/lib/search'
 import Footer from '@/app/components/Footer'
 import Header from '@/app/components/Header'
 
@@ -13,33 +13,7 @@ export default async function SearchPage({ searchParams }) {
   const params = await searchParams
   const raw = (params?.q ?? '').trim()
 
-  // Strip characters that would break the PostgREST or() filter; treat the rest as
-  // a plain case-insensitive substring.
-  const safe = raw.replace(/[,%()\\]/g, ' ').trim()
-
-  let laptops = []
-  let systems = []
-
-  if (safe) {
-    const like = `%${safe}%`
-    const [{ data: lap }, { data: os }] = await Promise.all([
-      supabase
-        .from('laptops')
-        .select('*')
-        .or(`brand.ilike.${like},model.ilike.${like}`)
-        .order('brand', { ascending: true })
-        .order('year', { ascending: false })
-        .order('model', { ascending: true }),
-      supabase
-        .from('operating_systems')
-        .select('*')
-        .or(`name.ilike.${like},type.ilike.${like},version.ilike.${like}`)
-        .order('name', { ascending: true }),
-    ])
-    laptops = lap ?? []
-    systems = os ?? []
-  }
-
+  const { laptops, systems } = raw ? await searchAll(raw) : { laptops: [], systems: [] }
   const total = laptops.length + systems.length
 
   return (
