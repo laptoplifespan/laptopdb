@@ -76,7 +76,13 @@ export default async function LaptopsPage() {
               style={{color: '#102030', borderBottom: '2px solid #2A6EA8'}}
               className="text-2xl font-bold mb-5 pb-2"
             >
-              {brand}
+              <Link
+                href={`/laptops/brand/${brand.toLowerCase()}`}
+                style={{color: '#102030'}}
+                className="hover:opacity-70 transition"
+              >
+                {brand}
+              </Link>
             </h3>
 
             {years.size === 0 && (
