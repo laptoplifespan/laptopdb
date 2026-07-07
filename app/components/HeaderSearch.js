@@ -62,7 +62,7 @@ export default function HeaderSearch() {
           onChange={(e) => setQ(e.target.value)}
           onFocus={() => { if (hasResults) setOpen(true) }}
           onBlur={() => setTimeout(() => setOpen(false), 150)}
-          placeholder="Search laptops & OSes"
+          placeholder="Search Laptops and OSs"
           aria-label="Search laptops and operating systems"
           style={inputStyle}
         />
