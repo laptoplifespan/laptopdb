@@ -45,7 +45,24 @@ export default async function LaptopsPage() {
       <Header />
 
       <div className="max-w-6xl mx-auto px-6 py-12">
-        <h2 style={{color: '#102030'}} className="text-4xl font-bold mb-8">All Laptops</h2>
+        <h2 style={{color: '#102030'}} className="text-4xl font-bold mb-6">All Laptops</h2>
+
+        {/* Browse by brand */}
+        <div className="mb-10">
+          <p style={{color: '#2A3A4A'}} className="text-sm font-medium mb-3">Jump to a brand</p>
+          <div className="flex flex-wrap gap-3">
+            {[...byBrand.keys()].map((brand) => (
+              <Link
+                key={brand}
+                href={`/laptops/brand/${brand.toLowerCase()}`}
+                className="transition hover:opacity-90"
+                style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8', color: '#102030', borderRadius: '9999px', padding: '8px 18px', fontWeight: 600, fontSize: '14px'}}
+              >
+                {brand}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         {error && <p className="text-red-600">Error loading laptops.</p>}
 

@@ -18,6 +18,18 @@ export default async function sitemap() {
     priority: 0.8,
   })) || []
 
+  // One URL per distinct brand (e.g. /laptops/brand/dell).
+  const { data: brandRows } = await supabase
+    .from('laptops')
+    .select('brand')
+
+  const brandUrls = [...new Set((brandRows ?? []).map((r) => r.brand).filter(Boolean))].map((brand) => ({
+    url: `${baseUrl}/laptops/brand/${brand.toLowerCase()}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }))
+
   const osUrls = systems?.map((os) => ({
     url: `${baseUrl}/os/${os.slug}`,
     lastModified: new Date(),
@@ -62,6 +74,7 @@ export default async function sitemap() {
       changeFrequency: 'yearly',
       priority: 0.3,
     },
+    ...brandUrls,
     ...laptopUrls,
     ...osUrls,
   ]
