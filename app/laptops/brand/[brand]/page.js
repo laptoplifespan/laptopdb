@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Footer from '@/app/components/Footer'
 import Header from '@/app/components/Header'
+import BrandLaptops from '@/app/components/BrandLaptops'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,19 +49,6 @@ export default async function BrandPage({ params }) {
   // Unknown brand with no models → 404
   if (!name) notFound()
 
-  // Group this brand's laptops by year (newest first, "Unknown" last).
-  const byYear = new Map()
-  for (const laptop of laptops ?? []) {
-    const year = laptop.year ?? 'Unknown'
-    if (!byYear.has(year)) byYear.set(year, [])
-    byYear.get(year).push(laptop)
-  }
-  const orderedYears = [...byYear.keys()].sort((a, b) => {
-    if (a === 'Unknown') return 1
-    if (b === 'Unknown') return -1
-    return b - a
-  })
-
   return (
     <main style={{backgroundColor: '#B8C4CE'}} className="min-h-screen">
       <Header />
@@ -72,30 +60,11 @@ export default async function BrandPage({ params }) {
 
         <h2 style={{color: '#102030'}} className="text-4xl font-bold mb-8">{name} Laptops</h2>
 
-        {(!laptops || laptops.length === 0) && (
+        {(!laptops || laptops.length === 0) ? (
           <p style={{color: '#2A3A4A'}} className="text-sm italic">No {name} models listed yet.</p>
+        ) : (
+          <BrandLaptops laptops={laptops} />
         )}
-
-        {orderedYears.map((year) => (
-          <div key={year} className="mb-8">
-            <h3 style={{color: '#102030', borderBottom: '2px solid #2A6EA8'}} className="text-2xl font-bold mb-5 pb-2">
-              {year === 'Unknown' ? 'Year unknown' : year}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {byYear.get(year).map((laptop) => (
-                <Link
-                  key={laptop.id}
-                  href={`/laptops/${laptop.slug}`}
-                  className="rounded-xl p-6 transition hover:opacity-90"
-                  style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}}
-                >
-                  <p style={{color: '#2A6EA8'}} className="text-sm font-medium mb-1">{laptop.brand}</p>
-                  <h4 style={{color: '#102030'}} className="text-xl font-semibold">{laptop.model}</h4>
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
       </div>
       <Footer />
     </main>
