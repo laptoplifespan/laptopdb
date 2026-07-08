@@ -5,15 +5,6 @@ import Link from 'next/link'
 
 const EMPTY = { laptops: [], systems: [] }
 
-const inputStyle = {
-  backgroundColor: '#B8C4CE',
-  border: '1px solid #3A5068',
-  color: '#102030',
-  borderRadius: '6px',
-  padding: '6px 12px',
-  width: '220px',
-}
-
 const itemStyle = {
   display: 'block',
   padding: '8px 12px',
@@ -21,7 +12,18 @@ const itemStyle = {
   borderBottom: '1px solid #C4CED8',
 }
 
-export default function HeaderSearch() {
+// `hero` renders a larger, full-width search (for the homepage hero); otherwise
+// the compact header size.
+export default function HeaderSearch({ hero = false }) {
+  const inputStyle = {
+    backgroundColor: '#B8C4CE',
+    border: '1px solid #3A5068',
+    color: '#102030',
+    borderRadius: hero ? '10px' : '6px',
+    padding: hero ? '14px 18px' : '6px 12px',
+    fontSize: hero ? '16px' : '14px',
+    width: hero ? '100%' : '220px',
+  }
   const [q, setQ] = useState('')
   const [results, setResults] = useState(EMPTY)
   const [open, setOpen] = useState(false)
@@ -74,7 +76,8 @@ export default function HeaderSearch() {
             position: 'absolute',
             top: 'calc(100% + 6px)',
             right: 0,
-            width: '300px',
+            left: hero ? 0 : 'auto',
+            width: hero ? 'auto' : '300px',
             maxHeight: '70vh',
             overflowY: 'auto',
             backgroundColor: '#A4B0BC',
