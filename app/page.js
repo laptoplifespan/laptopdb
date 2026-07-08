@@ -11,8 +11,6 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic'
 
-const FEATURED_BRANDS = ['Acer', 'Apple', 'Asus', 'Dell', 'HP', 'Lenovo']
-
 const card = { backgroundColor: '#A4B0BC', border: '1px solid #C4CED8' }
 
 export default async function Home() {
@@ -22,23 +20,6 @@ export default async function Home() {
     supabase.from('configurations').select('*', { count: 'exact', head: true }),
     supabase.from('operating_systems').select('*', { count: 'exact', head: true }),
   ])
-
-  // Brands present in the data, merged with the featured list (kept alphabetical).
-  const { data: brandRows } = await supabase.from('laptops').select('brand')
-  const brands = [...new Set([...FEATURED_BRANDS, ...((brandRows ?? []).map((r) => r.brand).filter(Boolean))])].sort()
-
-  // Operating systems and a few laptops to explore.
-  const { data: systems } = await supabase
-    .from('operating_systems')
-    .select('name, version, type, slug')
-    .order('name', { ascending: true })
-
-  const { data: laptops } = await supabase
-    .from('laptops')
-    .select('brand, model, slug, year')
-    .order('year', { ascending: false })
-    .order('brand', { ascending: true })
-    .limit(6)
 
   const stats = [
     { value: laptopCount ?? 0, label: 'Laptop models' },
@@ -76,59 +57,6 @@ export default async function Home() {
           ))}
         </div>
       </section>
-
-      {/* Browse by brand */}
-      <section className="max-w-6xl mx-auto px-6 py-10">
-        <h2 style={{color: '#102030'}} className="text-2xl font-bold mb-5">Browse by brand</h2>
-        <div className="flex flex-wrap gap-3">
-          {brands.map((brand) => (
-            <Link
-              key={brand}
-              href={`/laptops/brand/${brand.toLowerCase()}`}
-              style={{...card, color: '#102030', borderRadius: '9999px', padding: '10px 22px', fontWeight: 600}}
-              className="transition hover:opacity-90"
-            >
-              {brand}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Browse by OS */}
-      <section className="max-w-6xl mx-auto px-6 py-10">
-        <div className="flex items-baseline justify-between mb-5">
-          <h2 style={{color: '#102030'}} className="text-2xl font-bold">Browse by operating system</h2>
-          <Link href="/os" style={{color: '#2A6EA8'}} className="text-sm hover:opacity-70">View all →</Link>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {systems?.map((os) => (
-            <Link key={os.slug} href={`/os/${os.slug}`} style={card} className="rounded-xl p-4 transition hover:opacity-90">
-              <p style={{color: '#2A6EA8'}} className="text-xs font-medium mb-1">{os.type}</p>
-              <h3 style={{color: '#102030'}} className="font-semibold">{os.name}</h3>
-              {os.version && <p style={{color: '#243444'}} className="text-xs">{os.version}</p>}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Explore laptops */}
-      {laptops?.length > 0 && (
-        <section className="max-w-6xl mx-auto px-6 py-10">
-          <div className="flex items-baseline justify-between mb-5">
-            <h2 style={{color: '#102030'}} className="text-2xl font-bold">Explore laptops</h2>
-            <Link href="/laptops" style={{color: '#2A6EA8'}} className="text-sm hover:opacity-70">See all →</Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {laptops.map((laptop) => (
-              <Link key={laptop.slug} href={`/laptops/${laptop.slug}`} style={card} className="rounded-xl p-6 transition hover:opacity-90">
-                <p style={{color: '#2A6EA8'}} className="text-sm font-medium mb-1">{laptop.brand}</p>
-                <h3 style={{color: '#102030'}} className="text-xl font-semibold">{laptop.model}</h3>
-                {laptop.year && <p style={{color: '#243444'}} className="text-sm mt-1">{laptop.year}</p>}
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Value props */}
       <section className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
