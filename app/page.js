@@ -42,7 +42,7 @@ export default async function Home() {
         </div>
         <div className="flex gap-4 justify-center mt-6">
           <Link href="/laptops" style={{backgroundColor: '#2A6EA8', color: '#fff'}} className="px-6 py-3 rounded-lg font-semibold transition hover:opacity-90">Browse Laptops</Link>
-          <Link href="/os" style={{color: '#102030', border: '1px solid #3A5068'}} className="px-6 py-3 rounded-lg font-semibold transition hover:opacity-70">Operating Systems</Link>
+          <Link href="/os" style={{backgroundColor: '#2A6EA8', color: '#fff'}} className="px-6 py-3 rounded-lg font-semibold transition hover:opacity-90">Operating Systems</Link>
         </div>
       </section>
 
