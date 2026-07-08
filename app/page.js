@@ -72,7 +72,7 @@ export default async function Home() {
         </Link>
         <Link href="/laptops" style={card} className="rounded-xl p-6 transition hover:opacity-90 block">
           <div className="text-3xl mb-4">⚡</div>
-          <h3 style={{color: '#102030'}} className="text-xl font-semibold mb-2">Upgrade Guides</h3>
+          <h3 style={{color: '#102030'}} className="text-xl font-semibold mb-2">Upgrade Paths</h3>
           <p style={{color: '#243444'}}>Find compatible RAM and storage upgrades to breathe new life into your machine.</p>
         </Link>
       </section>
