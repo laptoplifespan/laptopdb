@@ -5,8 +5,8 @@ import Header from './components/Header'
 import HeaderSearch from './components/HeaderSearch'
 
 export const metadata = {
-  title: 'LaptopLifeSpan — Find Your Laptop\'s Full Potential',
-  description: 'Look up laptop specs, check operating system compatibility, and discover upgrade options to extend your laptop\'s lifespan.',
+  title: 'LaptopLifeSpan — Extend Your Laptop\'s Lifespan',
+  description: 'Look up detailed laptop specs, check which operating systems your laptop can run, and find upgrades to keep it from becoming another piece of e-waste.',
 }
 
 export const dynamic = 'force-dynamic'
