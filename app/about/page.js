@@ -38,9 +38,9 @@ export default function AboutPage() {
           </div>
 
           <div>
-            <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-3">Editorial Independence</h2>
+            <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-3">Funding & Transparency</h2>
             <p style={{color: '#243444'}} className="leading-relaxed">
-              The specifications and compatibility information we publish are not influenced by advertisers or affiliate partners. To keep the site free, we may display advertisements and use affiliate links (for example, to compatible RAM or storage upgrades). If you buy through an affiliate link, we may earn a small commission at no extra cost to you. See our <a href="/privacy" style={{color: '#2A6EA8', textDecoration: 'underline'}}>Privacy Policy</a> for details.
+              Our goal is to give you accurate, useful information — the specs and compatibility come first, always. To keep the site free, we also display ads and use affiliate links (for example, to RAM or storage upgrades), and may earn a small commission if you buy through one, at no extra cost to you. See our <a href="/privacy" style={{color: '#2A6EA8', textDecoration: 'underline'}}>Privacy Policy</a> for details.
             </p>
           </div>
 
