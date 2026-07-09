@@ -33,9 +33,9 @@ export default async function Home() {
 
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-16 pb-10 text-center">
-        <h1 style={{color: '#102030'}} className="text-5xl font-bold mb-5">Find Your Laptop&apos;s Full Potential</h1>
+        <h1 style={{color: '#102030'}} className="text-5xl font-bold mb-5">Extend Your Laptop&apos;s Lifespan</h1>
         <p style={{color: '#2A3A4A'}} className="text-xl mb-8 max-w-2xl mx-auto">
-          Look up detailed specs, check which operating systems your laptop can run, and find upgrades to extend its lifespan.
+          Look up detailed specs, check which operating systems your laptop can run, and find upgrades to keep it from becoming another piece of e-waste.
         </p>
         <div className="max-w-xl mx-auto text-left">
           <HeaderSearch hero />
