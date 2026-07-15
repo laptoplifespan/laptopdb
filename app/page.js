@@ -22,9 +22,9 @@ export default async function Home() {
   ])
 
   const stats = [
-    { value: laptopCount ?? 0, label: 'Laptop models' },
-    { value: configCount ?? 0, label: 'Configurations' },
-    { value: osCount ?? 0, label: 'Operating systems' },
+    { value: laptopCount ?? 0, label: 'Laptop models', href: '/laptops' },
+    { value: configCount ?? 0, label: 'Configurations', href: '/laptops' },
+    { value: osCount ?? 0, label: 'Operating systems', href: '/os' },
   ]
 
   return (
@@ -50,10 +50,10 @@ export default async function Home() {
       <section className="max-w-6xl mx-auto px-6 py-6">
         <div className="grid grid-cols-3 gap-4">
           {stats.map((s) => (
-            <div key={s.label} style={card} className="rounded-xl py-6 text-center">
+            <Link key={s.label} href={s.href} style={card} className="rounded-xl py-6 text-center block transition hover:opacity-90">
               <div style={{color: '#2A6EA8'}} className="text-3xl md:text-4xl font-bold">{s.value}</div>
               <div style={{color: '#243444'}} className="text-sm mt-1">{s.label}</div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
