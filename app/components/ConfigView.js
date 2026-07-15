@@ -106,6 +106,21 @@ export default function ConfigView({ laptop, configs, allOS, compatByConfig }) {
             <p style={{color: '#2A3A4A'}} className="text-sm italic">No upgrade recommendations added yet.</p>
           )}
         </div>
+
+        {/* Recommended Parts */}
+        <div style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}} className="rounded-xl p-6 mt-6">
+          <h2 style={{color: '#102030'}} className="text-xl font-semibold mb-4">Recommended Parts</h2>
+          {laptop.recommended_parts ? (
+            <>
+              <p style={{color: '#243444'}} className="leading-relaxed whitespace-pre-line">{linkify(laptop.recommended_parts)}</p>
+              <p style={{color: '#2A3A4A', borderTop: '1px solid #C4CED8'}} className="text-xs mt-4 pt-3">
+                We may earn a commission from purchases made through these links, at no extra cost to you.
+              </p>
+            </>
+          ) : (
+            <p style={{color: '#2A3A4A'}} className="text-sm italic">No recommended parts listed yet.</p>
+          )}
+        </div>
       </div>
 
       {/* Right column: OS compatibility for the selected configuration */}

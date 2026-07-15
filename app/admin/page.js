@@ -6,7 +6,7 @@ import ConfigManager from '@/app/components/ConfigManager'
 const EMPTY_LAPTOP = {
   id: null, brand: '', model: '', slug: '', year: '',
   display_inches: '', display_resolution: '', weight_kg: '',
-  description: '', upgrade_path: ''
+  description: '', upgrade_path: '', recommended_parts: ''
 }
 
 const EMPTY_OS = {
@@ -236,6 +236,14 @@ export default function AdminPage() {
                 <textarea
                   value={laptop.upgrade_path || ''}
                   onChange={e => setLaptop({...laptop, upgrade_path: e.target.value})}
+                  style={{...inputStyle, height: '100px', resize: 'vertical'}}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Recommended Parts (affiliate links — paste product URLs, they become clickable; a disclosure shows automatically)</label>
+                <textarea
+                  value={laptop.recommended_parts || ''}
+                  onChange={e => setLaptop({...laptop, recommended_parts: e.target.value})}
                   style={{...inputStyle, height: '100px', resize: 'vertical'}}
                 />
               </div>

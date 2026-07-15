@@ -20,6 +20,7 @@ function laptopFields(body) {
     weight_kg: body.weight_kg ? parseFloat(body.weight_kg) : null,
     description: body.description || null,
     upgrade_path: body.upgrade_path || null,
+    recommended_parts: body.recommended_parts || null,
   }
 }
 
