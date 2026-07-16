@@ -49,6 +49,19 @@ export default async function OSDetailPage({ params }) {
     }
   }
 
+  // Group compatible laptops by brand for collapsible sections; within a brand,
+  // newest year first, then model name.
+  const byBrand = new Map()
+  for (const laptop of compatibleLaptops) {
+    const brand = laptop.brand || 'Other'
+    if (!byBrand.has(brand)) byBrand.set(brand, [])
+    byBrand.get(brand).push(laptop)
+  }
+  const brands = [...byBrand.keys()].sort()
+  for (const list of byBrand.values()) {
+    list.sort((a, b) => (b.year ?? 0) - (a.year ?? 0) || String(a.model ?? '').localeCompare(String(b.model ?? '')))
+  }
+
   return (
     <main style={{backgroundColor: '#B8C4CE'}} className="min-h-screen">
       <Header />
@@ -101,20 +114,34 @@ export default async function OSDetailPage({ params }) {
             <p style={{color: '#2A3A4A'}}>No compatible laptops recorded yet.</p>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {compatibleLaptops.map((laptop) => (
-              <Link
-                key={laptop.id}
-                href={`/laptops/${laptop.slug}`}
-                className="rounded-lg p-4 transition hover:opacity-90"
-                style={{backgroundColor: '#B8C4CE', border: '1px solid #C4CED8'}}
+          {brands.map((brand) => (
+            <details
+              key={brand}
+              className="mb-3 rounded-lg overflow-hidden"
+              style={{backgroundColor: '#B8C4CE', border: '1px solid #C4CED8'}}
+            >
+              <summary
+                className="cursor-pointer px-4 py-3 font-semibold select-none hover:opacity-80 transition"
+                style={{color: '#102030'}}
               >
-                <p style={{color: '#2A6EA8'}} className="text-sm font-medium mb-1">{laptop.brand}</p>
-                <h3 style={{color: '#102030'}} className="font-semibold">{laptop.model}</h3>
-                {laptop.year && <p style={{color: '#243444'}} className="text-sm">{laptop.year}</p>}
-              </Link>
-            ))}
-          </div>
+                {brand} <span style={{color: '#2A6EA8'}}>({byBrand.get(brand).length})</span>
+              </summary>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 pb-4">
+                {byBrand.get(brand).map((laptop) => (
+                  <Link
+                    key={laptop.id}
+                    href={`/laptops/${laptop.slug}`}
+                    className="rounded-lg p-4 transition hover:opacity-90"
+                    style={{backgroundColor: '#A4B0BC', border: '1px solid #C4CED8'}}
+                  >
+                    <p style={{color: '#2A6EA8'}} className="text-sm font-medium mb-1">{laptop.brand}</p>
+                    <h3 style={{color: '#102030'}} className="font-semibold">{laptop.model}</h3>
+                    {laptop.year && <p style={{color: '#243444'}} className="text-sm">{laptop.year}</p>}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          ))}
         </div>
       </div>
       <Footer />
