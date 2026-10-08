@@ -1,0 +1,2 @@
+Exported 2026-10-08T16:48:29.719Z from https://wvsfrcduhjltpzkfemzd.supabase.co
+Tables: laptops, operating_systems, configurations, compatibility
